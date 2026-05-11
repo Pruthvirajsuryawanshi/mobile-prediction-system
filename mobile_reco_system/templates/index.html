@@ -320,21 +320,21 @@
         AI Assistant
     </div>
 
-    <div class="chat-body">
+    <div class="chat-body" id="chatbox">
         <p>Hello 👋</p>
         <p>How can I help you choose a smartphone?</p>
     </div>
 
     <div class="chat-input">
 
-        <input type="text" placeholder="Ask anything...">
+        <input type="text" id="userInput" placeholder="Ask anything...">
 
-        <button>Send</button>
+        <button onclick="sendMessage()">Send</button>
 
     </div>
 
 </div>
-<script src="static\script.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 
 </html>

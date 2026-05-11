@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
+import pandas as pd
+from chatbot import chatbot_response
 
 app = Flask(__name__)
 
@@ -34,5 +36,23 @@ def home():
         accessories=accessories
     )
 
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    user_message = data.get('message', '')
+    
+    # Get recommendations from chatbot
+    recommendations = chatbot_response(user_message)
+    
+    if not recommendations:
+        reply = "I couldn't find any specific recommendations for that. Try asking about gaming, camera, or battery performance!"
+    else:
+        reply = "Based on your request, here are some top picks:<br><ul>"
+        for rec in recommendations:
+            reply += f"<li><b>{rec['brand']} {rec['model']}</b> - ₹{rec['price']} (Rating: {rec['rating']}⭐)</li>"
+        reply += "</ul>"
+    
+    return jsonify({"reply": reply})
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)
