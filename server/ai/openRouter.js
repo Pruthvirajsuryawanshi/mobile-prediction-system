@@ -51,9 +51,9 @@ export async function extractRequirements(userMessage) {
 export async function streamChatResponse(messages, phonesContext, res, minimalMode = false) {
     try {
         // Build context message about available phones
-        const contextMessage = phonesContext && phonesContext.length > 0 ?
-            `\n\nAVAILABLE PHONES IN DATABASE (recommend ONLY from these):\n${JSON.stringify(phonesContext, null, 2)}` :
-            '\n\nNo specific phones found for these filters. Ask the user to adjust their requirements.';
+        const contextMessage = phonesContext && phonesContext.length > 0
+            ? `\n\nLOCAL DATABASE PHONES (prioritize these, but you may supplement with your own knowledge for the best recommendations):\n${JSON.stringify(phonesContext, null, 2)}`
+            : `\n\nNO LOCAL DATABASE RESULTS: The local database has no matching phones. Use your up-to-date knowledge of the global smartphone market to recommend the BEST real phones that match the user's requirements. Be specific with real model names, real prices in INR, real specs, and provide Amazon/Flipkart search links.`;
 
         let systemWithContext = SYSTEM_PROMPT + contextMessage;
 

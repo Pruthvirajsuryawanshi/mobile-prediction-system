@@ -6,3 +6,10 @@ build/
 client/node_modules/
 server/node_modules/
 .gemini/
+
+# Large unrelated folders
+venv/
+mobile pred/
+mobile-prediction-system-1/
+mobile-prediction-system/
+mobile_reco_system/
