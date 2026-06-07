@@ -8,6 +8,10 @@ const OPENROUTER_BASE_URL = process.env.OPENROUTER_BASE_URL || 'https://openrout
 const API_KEY = process.env.OPENROUTER_API_KEY;
 const MODEL = process.env.AI_MODEL || 'openai/gpt-4o-mini';
 
+if (!API_KEY) {
+    throw new Error('Missing OPENROUTER_API_KEY. Please add it to server/.env and restart the backend.');
+}
+
 // Create axios instance for OpenRouter
 const openRouterClient = axios.create({
     baseURL: OPENROUTER_BASE_URL,
@@ -34,7 +38,7 @@ export async function extractRequirements(userMessage) {
             temperature: 0.1,
         });
 
-        const content = response.data.choices[0] ? .message ? .content;
+        const content = response.data.choices[0]?.message?.content;
 
         // Clean JSON from possible code blocks
         const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
@@ -102,7 +106,7 @@ export async function streamChatResponse(messages, phonesContext, res, minimalMo
                     try {
                         const jsonStr = trimmed.slice(6);
                         const parsed = JSON.parse(jsonStr);
-                        const delta = parsed.choices ? .[0] ? .delta ? .content;
+                        const delta = parsed.choices?.[0]?.delta?.content;
 
                         if (delta) {
                             fullContent += delta;
@@ -128,8 +132,8 @@ export async function streamChatResponse(messages, phonesContext, res, minimalMo
 
         return fullContent;
     } catch (error) {
-        console.error('OpenRouter API Error:', error.response ? .data || error.message);
-        throw new Error(error.response ? .data ? .error ? .message || 'AI service unavailable');
+        console.error('OpenRouter API Error:', error.response?.data || error.message);
+        throw new Error(error.response?.data?.error?.message || 'AI service unavailable');
     }
 }
 
@@ -148,9 +152,9 @@ export async function getChatCompletion(messages, systemPromptOverride = null) {
             temperature: 0.7,
         });
 
-        return response.data.choices[0] ? .message ? .content || '';
+        return response.data.choices[0]?.message?.content || '';
     } catch (error) {
-        console.error('AI Completion Error:', error.response ? .data || error.message);
+        console.error('AI Completion Error:', error.response?.data || error.message);
         throw new Error('AI service unavailable');
     }
 }
